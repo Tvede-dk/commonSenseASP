@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace commonSenseASP.mongoDB {
     public abstract class BaseService<T> where T : BaseModel {
-         public abstract IMongoCollection<T> dataCollection { get; }
+        public abstract IMongoCollection<T> dataCollection { get; }
         /// <summary>
         /// 
         /// </summary>
@@ -25,25 +25,34 @@ namespace commonSenseASP.mongoDB {
         }
 
         public Task<ReplaceOneResult> TryUpdate(T toInsert) {
+            if (toInsert == null) {
+                return Task.FromResult<ReplaceOneResult>(null); 
+            }
             return dataCollection.ReplaceOneAsync((document => document.id == toInsert.id), toInsert);
         }
 
         public Task TryCreate(T toInsert) {
+            if (toInsert == null) {
+                return Task.FromResult(default(T));
+            }
             return dataCollection.InsertOneAsync(toInsert);
         }
 
         public Task<T> TryDelete(T toDelete) {
+            if (toDelete == null) {
+                return Task.FromResult(default(T));
+            }
             return dataCollection.FindOneAndDeleteAsync((document => document.id == toDelete.id));
         }
 
-        public  Task<T> FindById(ObjectId id) {
+        public Task<T> FindById(ObjectId id) {
             var result = dataCollection.Find(document => document.id == id);
             return result.FirstOrDefaultAsync();
         }
 
         public Task<T> FindById(string id) {
             ObjectId objId;
-            if ( ObjectId.TryParse(id, out objId)) {
+            if (ObjectId.TryParse(id, out objId)) {
                 return FindById(objId);
             }
             return Task.FromResult<T>(null);
