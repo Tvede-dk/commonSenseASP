@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using commonSenceASP.Patterns;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -15,47 +16,48 @@ namespace commonSenseASP.mongoDB {
         /// <param name="limit"></param>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public Task<List<T>> GetPaginated(int page, int limit) {
+        public virtual Expected<Task<List<T>>> GetPaginated(int page, int limit) {
             //var lastTimeStamp = lastSeenObject.Timestamp;
-            return dataCollection.Find(x => true).Skip((page - 1) * limit).Limit(limit).ToListAsync();
+            return Expected<Task<List<T>>>.Success(dataCollection.Find(x => true).Skip((page - 1) * limit).Limit(limit).ToListAsync());
         }
 
-        public Task<long> GetCount() {
-            return dataCollection.CountAsync(x => true);
+        public virtual Expected<Task<long>> GetCount() {
+            return Expected<Task<long>>.Success(dataCollection.CountAsync(x => true));
         }
 
-        public Task<ReplaceOneResult> TryUpdate(T toInsert) {
+        public virtual Expected<Task<ReplaceOneResult>> TryUpdate(T toInsert) {
             if (toInsert == null) {
-                return Task.FromResult<ReplaceOneResult>(null); 
+                return Expected<Task<ReplaceOneResult>>.Failed(new InvalidOperationException("Object to insert is null"));
             }
-            return dataCollection.ReplaceOneAsync((document => document.id == toInsert.id), toInsert);
+            return Expected<Task<ReplaceOneResult>>.Success(dataCollection.ReplaceOneAsync((document => document.id == toInsert.id), toInsert));
         }
 
-        public Task TryCreate(T toInsert) {
+        public virtual Expected<Task> TryCreate(T toInsert) {
             if (toInsert == null) {
-                return Task.FromResult(default(T));
+                return Expected<Task>.Failed(new InvalidOperationException("Object to create is null"));
             }
-            return dataCollection.InsertOneAsync(toInsert);
+            return Expected<Task>.Success(dataCollection.InsertOneAsync(toInsert));
         }
 
-        public Task<T> TryDelete(T toDelete) {
+        public virtual Expected<Task<T>> TryDelete(T toDelete) {
             if (toDelete == null) {
-                return Task.FromResult(default(T));
+                return Expected<Task<T>>.Failed(new InvalidOperationException("Object to delete is null"));
             }
-            return dataCollection.FindOneAndDeleteAsync((document => document.id == toDelete.id));
+            return Expected<Task<T>>.Success(dataCollection.FindOneAndDeleteAsync((document => document.id == toDelete.id)));
         }
 
-        public Task<T> FindById(ObjectId id) {
+        public virtual Expected<Task<T>> FindById(ObjectId id) {
             var result = dataCollection.Find(document => document.id == id);
-            return result.FirstOrDefaultAsync();
+            return Expected<Task<T>>.Success(result.FirstOrDefaultAsync());
         }
 
-        public Task<T> FindById(string id) {
+        public virtual Expected<Task<T>> FindById(string id) {
             ObjectId objId;
             if (ObjectId.TryParse(id, out objId)) {
                 return FindById(objId);
+            } else {
+                return Expected<Task<T>>.Failed(new InvalidOperationException($"the supplied id {id} is invalid"));
             }
-            return Task.FromResult<T>(null);
         }
     }
 }
