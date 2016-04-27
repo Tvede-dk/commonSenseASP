@@ -43,8 +43,16 @@ namespace commonSenseASP.mongoDB {
             if (toDelete == null) {
                 return Expected<Task<T>>.Failed(new InvalidOperationException("Object to delete is null"));
             }
-            return Expected<Task<T>>.Success(dataCollection.FindOneAndDeleteAsync((document => document.id == toDelete.id)));
+            return TryDelete(toDelete.id);
         }
+
+        public virtual Expected<Task<T>> TryDelete(ObjectId id) {
+            if (id == ObjectId.Empty) {
+                return Expected<Task<T>>.Failed(new InvalidOperationException("Object to delete is empty"));
+            }
+            return Expected<Task<T>>.Success(dataCollection.FindOneAndDeleteAsync((document => document.id == id)));
+        }
+
 
         public virtual Expected<Task<T>> FindById(ObjectId id) {
             var result = dataCollection.Find(document => document.id == id);

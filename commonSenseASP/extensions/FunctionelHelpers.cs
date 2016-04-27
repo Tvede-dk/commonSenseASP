@@ -19,6 +19,15 @@ public static class FunctionalHelpers {
         }
         return result;
     }
+
+    public static HashSet<U> MapDistinct<U, T>(this IEnumerable<T> input, Func<T, U> generator) {
+        HashSet<U> result = new HashSet<U>();
+        foreach (var item in input) {
+            result.Add(generator(item));
+        }
+        return result;
+    }
+
     /// <summary>
     /// Performs and action over a IEnumerable (given an action.) 
     /// </summary>
