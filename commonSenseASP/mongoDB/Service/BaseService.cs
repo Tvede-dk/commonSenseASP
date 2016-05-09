@@ -18,7 +18,11 @@ namespace commonSenseASP.mongoDB {
         /// <returns></returns>
         public virtual Expected<Task<List<T>>> GetPaginated(int page, int limit) {
             //var lastTimeStamp = lastSeenObject.Timestamp;
-            return Expected<Task<List<T>>>.Success(dataCollection.Find(x => true).Skip((page - 1) * limit).Limit(limit).ToListAsync());
+            return Expected<Task<List<T>>>.Success(dataCollection.Find(x => true).Skip(calculateCurrentPage(page, limit)).Limit(limit).ToListAsync());
+        }
+
+        public int calculateCurrentPage(int page , int limit) {
+            return (page - 1) * limit;
         }
 
         public virtual Expected<Task<long>> GetCount() {
