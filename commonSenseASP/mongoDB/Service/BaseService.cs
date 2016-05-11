@@ -1,4 +1,4 @@
-﻿using commonSenceASP.Patterns;
+﻿using commonSenseASP.Patterns;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
