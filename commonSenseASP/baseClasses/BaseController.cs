@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc;
 using commonSenseASP.security;
+using Microsoft.Extensions.Logging;
 
 namespace commonSenseASP.baseClasses {
     [HttpsRemote]

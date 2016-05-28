@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Logging;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,12 +31,6 @@ namespace commonSenseASP.security {
             if (context == null) {
                 throw new ArgumentNullException(nameof(context));
             }
-
-            var factory = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>();
-            var logger = factory.CreateLogger<StatusCodeResult>();
-
-            logger.HttpStatusCodeResultExecuting(StatusCode);
-
             context.HttpContext.Response.StatusCode = StatusCode;
         }
     }

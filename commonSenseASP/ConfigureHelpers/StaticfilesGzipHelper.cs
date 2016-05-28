@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.StaticFiles;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;

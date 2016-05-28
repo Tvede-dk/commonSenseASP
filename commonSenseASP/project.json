@@ -2,23 +2,26 @@
   "version": "1.0.0-*",
   "description": "commonSenseASP Class Library",
   "authors": [ "Kasper T" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+
+  //"frameworks": {
+  //  "netstandard1.5": {
+  //    "imports": "dnxcore50"
+  //  }
+  //},
+  
   "frameworks": {
-    "net451": {
-      "dependencies": {
-        "MongoDB.Driver": "2.2.3"
-      }
-    }
+    "net451": { }
   },
   "dependencies": {
-    "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
-    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+    "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Authorization": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.StaticFiles": "1.0.0-rc2-final",
     "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
-    "Newtonsoft.Json": "8.0.3",
-    "System.Threading.Tasks": "4.0.11-beta-23516"
+    "MongoDB.Driver": "2.2.4",
+    "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0-rc2-final",
+    "NETStandard.Library": "1.5.0-rc2-24027",
+    "Newtonsoft.Json": "8.0.3"
   }
 }

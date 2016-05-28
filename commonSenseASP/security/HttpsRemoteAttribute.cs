@@ -1,16 +1,17 @@
 ﻿using System;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.OptionsModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace commonSenseASP.security {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
     public class HttpsRemoteAttribute : Attribute, IAuthorizationFilter, IOrderedFilter {
         public int Order { get; set; }
 
-        public void OnAuthorization(AuthorizationContext context) {
+        public void OnAuthorization(AuthorizationFilterContext context) {
             if (context == null) {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -19,7 +20,6 @@ namespace commonSenseASP.security {
                 HandleNonHttpsRequest(context);
             }
         }
-
 
         /// <summary>
         /// Called from <see cref="OnAuthorization"/> if the request is not received over HTTPS. Expectation is
@@ -35,25 +35,25 @@ namespace commonSenseASP.security {
         protected virtual void HandleNonHttpsRequest(FilterContext filterContext) {
             // only redirect for GET requests, otherwise the browser might not propagate the verb and request
             // body correctly.
-            if (!string.Equals(filterContext.HttpContext.Request.Method, "GET", StringComparison.OrdinalIgnoreCase)) {
-                filterContext.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
-            } else {
-                var optionsAccessor = filterContext.HttpContext.RequestServices.GetRequiredService<IOptions<MvcOptions>>();
+            //if (!string.Equals(filterContext.HttpContext.Request.Method, "GET", StringComparison.OrdinalIgnoreCase)) {
+            //    filterContext.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+            //} else {
+            //    //var optionsAccessor = filterContext.HttpContext.RequestServices.GetRequiredService<IOptions<MvcOptions>>();
 
-                var request = filterContext.HttpContext.Request;
+            //    var request = filterContext.HttpContext.Request;
 
-                var host = request.Host;
+            //    var host = request.Host;
 
-                var newUrl = string.Concat(
-                    "https://",
-                    host.ToUriComponent(),
-                    request.PathBase.ToUriComponent(),
-                    request.Path.ToUriComponent(),
-                    request.QueryString.ToUriComponent());
+            //    var newUrl = string.Concat(
+            //        "https://",
+            //        host.ToUriComponent(),
+            //        request.PathBase.ToUriComponent(),
+            //        request.Path.ToUriComponent(),
+            //        request.QueryString.ToUriComponent());
 
-                // redirect to HTTPS version of page
-                filterContext.HttpContext.Response.Redirect(newUrl, false);
-            }
+            //    // redirect to HTTPS version of page
+            //    filterContext.HttpContext.Response.Redirect(newUrl, false);
+            //}
         }
     }
 }
