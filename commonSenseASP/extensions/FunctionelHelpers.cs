@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 public static class FunctionalHelpers {
     /// <summary>
@@ -37,6 +38,18 @@ public static class FunctionalHelpers {
     public static void Foreach<T>(this IEnumerable<T> list, Action<T> onEach) {
         foreach (var item in list) {
             onEach(item);
+        }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="onEach"></param>
+    /// <returns></returns>
+    public async static Task ForeachAsync<T>(this IEnumerable<T> list,Func<T,Task> onEach) {
+        foreach (var item in list) {
+            await onEach(item);
         }
     }
 
